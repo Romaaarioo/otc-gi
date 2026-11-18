@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050c1a" />
+    <meta
+      name="description"
+      content="Генератор текста поручения на покупку и конвертацию."
+    />
+    <title>Драфт поручения</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="page-header">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> GO INVEST · ПОМОЩНИК</div>
+        <h1>Драфт поручения</h1>
+        <p>Выберите продукт, укажите сумму и комиссию — текст поручения соберётся автоматически</p>
+      </header>
+
+      <section class="date-panel" aria-label="Даты поручения">
+        <div class="date-group">
+          <span class="date-icon" aria-hidden="true">▦</span>
+          <label for="order-date">
+            <span class="date-label">Дата поручения</span>
+            <input id="order-date" type="date" />
+          </label>
+        </div>
+        <div class="date-divider"></div>
+        <div class="expiry-group">
+          <span class="date-label">Срок действия поручения</span>
+          <strong id="expiry-date">—</strong>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Параметры поручения">
+        <div class="field field-product">
+          <h2>Продукт</h2>
+          <div class="choice-list" id="product-options" role="group" aria-label="Продукт">
+            <button class="choice product-choice" type="button" data-product="sandbox" aria-pressed="true">
+              <span>Sandbox</span><span class="radio-mark"></span>
+            </button>
+            <button class="choice product-choice" type="button" data-product="skild" aria-pressed="false">
+              <span>Skild AI</span><span class="radio-mark"></span>
+            </button>
+            <button class="choice product-choice" type="button" data-product="titans" aria-pressed="false">
+              <span>Titans</span><span class="radio-mark"></span>
+            </button>
+            <button class="choice product-choice conversion-choice" type="button" data-product="conversion" aria-pressed="false">
+              <span><strong>Конвертация</strong><small>Продажа USD за рубли</small></span><span class="radio-mark"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="field field-amount">
+          <h2>Сумма</h2>
+          <label class="input-card" for="amount">
+            <span>Сумма сделки</span>
+            <input id="amount" type="text" inputmode="decimal" autocomplete="off" value="20500" placeholder="Например, 5 млн" />
+          </label>
+          <p class="hint" id="amount-hint" aria-live="polite">Можно ввести 5к, 5кк, 5 млн или 5 000 000</p>
+        </div>
+
+        <div class="field field-currency">
+          <h2>Валюта</h2>
+          <div class="currency-switch currency-rub" id="currency-switch" role="group" aria-label="Валюта">
+            <button type="button" data-currency="RUB" aria-pressed="true">Рубль</button>
+            <button type="button" data-currency="USD" aria-pressed="false">Доллар</button>
+          </div>
+          <p class="currency-note" id="currency-note">Расчёт суммы с учётом комиссии</p>
+        </div>
+
+        <div class="field field-commission">
+          <h2>Комиссия</h2>
+          <div class="commission-list" id="commission-options" role="group" aria-label="Комиссия">
+            <button class="commission-choice" type="button" data-rate="0" data-name="0%" aria-pressed="true">
+              <span><strong>0%</strong><small>Без вычета</small></span><span class="radio-mark"></span>
+            </button>
+            <button class="commission-choice" type="button" data-rate="0.5" data-name="Personal Broker" aria-pressed="false">
+              <span><strong>Personal Broker</strong><small>0,5%</small></span><span class="radio-mark"></span>
+            </button>
+            <button class="commission-choice" type="button" data-rate="0.3" data-name="Investor" aria-pressed="false">
+              <span><strong>Investor</strong><small>0,3%</small></span><span class="radio-mark"></span>
+            </button>
+            <button class="commission-choice" type="button" data-rate="0.3" data-name="Premium Start" aria-pressed="false">
+              <span><strong>Premium Start</strong><small>0,3%</small></span><span class="radio-mark"></span>
+            </button>
+            <button class="commission-choice" type="button" data-rate="0.3" data-name="Trader" aria-pressed="false">
+              <span><strong>Trader</strong><small>0,3%</small></span><span class="radio-mark"></span>
+            </button>
+            <button class="commission-choice" type="button" data-rate="0.2" data-name="Private Professional" aria-pressed="false">
+              <span><strong>Private Professional</strong><small>0,2%</small></span><span class="radio-mark"></span>
+            </button>
+            <button class="commission-choice" type="button" data-rate="0.1" data-name="Advisor Pro" aria-pressed="false">
+              <span><strong>Advisor Pro</strong><small>0,1%</small></span><span class="radio-mark"></span>
+            </button>
+            <button class="commission-choice custom-choice" type="button" data-rate="custom" data-name="Свой процент" aria-pressed="false">
+              <span><strong>Свой процент</strong><small>Укажите значение</small></span><span class="radio-mark"></span>
+            </button>
+          </div>
+          <label class="custom-rate" id="custom-rate-wrap" hidden>
+            <span>Ваш процент, %</span>
+            <input id="custom-rate" type="number" min="0" max="100" step="0.01" inputmode="decimal" placeholder="Например, 0,25" />
+          </label>
+        </div>
+
+        <div class="field field-draft">
+          <div class="draft-heading">
+            <h2>Драфт</h2>
+            <button class="copy-button" id="copy-button" type="button" disabled>
+              <span aria-hidden="true">▢</span> Копировать
+            </button>
+          </div>
+          <div class="draft-card">
+            <pre id="draft-text" aria-live="polite">Укажите сумму, чтобы сформировать поручение.</pre>
+          </div>
+          <p class="draft-footnote">Проверьте данные поручения перед отправкой брокеру.</p>
+        </div>
+      </section>
+      <footer>Внутренний инструмент · Проверьте условия поручения перед использованием</footer>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./script.js"></script>
+  </body>
+</html>
