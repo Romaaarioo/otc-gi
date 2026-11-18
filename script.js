@@ -230,6 +230,7 @@
           item.setAttribute("aria-pressed", String(index === 0));
         });
       }
+      currencySwitch.classList.toggle("currency-rub", selectedCurrency === "RUB");
       currencySwitch.classList.toggle("is-locked", isConversion);
       currencySwitch.querySelectorAll("button").forEach((item) => {
         item.setAttribute("aria-pressed", String(item.dataset.currency === selectedCurrency));
