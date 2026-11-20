@@ -163,6 +163,7 @@
   function getExpiry() {
     const start = parseISODate(dateInput.value);
     if (selectedProduct === "conversion") return addBusinessDays(start, 4);
+    if (selectedProduct === "antropic" && selectedCurrency === "RUB") return start;
     start.setDate(start.getDate() + 60);
     return start;
   }
