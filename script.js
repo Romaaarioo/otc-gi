@@ -27,6 +27,54 @@
         `С информацией о конфликте интересов ознакомлен (${CONFLICT_URL})`,
       ],
     },
+    whatnot: {
+      name: "Whatnot",
+      price: 1000,
+      rubleText: [
+        "Прошу купить акции класса M (Shares of Class M) AGS GV Pre-Ipo XII (ISIN KZQ000001700)",
+        "Место заключения сделки – внебиржевой рынок",
+        "Количество акций – максимально доступное (без дробных частей), исходя из Суммы сделки",
+        "Цена одной акции – текущая",
+        "Сумма сделки – {amount} рублей",
+        "Срок действия поручения по {expiry}",
+        "Прошу считать поручение исполненным при покупке ценных бумаг на объем не менее чем на 90% от указанной в поручении Суммы сделки",
+        `С информацией о конфликте интересов ознакомлен (${CONFLICT_URL})`,
+      ],
+      dollarText: [
+        "Прошу купить акции класса M (Shares of Class M) AGS GV Pre-Ipo XII (ISIN KZQ000001700)",
+        "Место заключения сделки – внебиржевой рынок",
+        "Количество ценных бумаг – {quantity}",
+        "Цена одной ценной бумаги – 1000",
+        "Валюта платежа – USD",
+        "Место хранения при покупке – по усмотрению Брокера, кроме российских расчетных депозитариев",
+        "Срок действия поручения – по {expiry}",
+        `С информацией о конфликте интересов ознакомлен (${CONFLICT_URL})`,
+      ],
+    },
+    antropic: {
+      name: "Antropic",
+      usesTotalAmount: true,
+      rubleText: [
+        "Прошу купить акции NASDAQ: ANT (ISIN US03703U1079)",
+        "Место заключения сделки – внебиржевой рынок",
+        "Количество акций – максимально доступное (без дробных частей), исходя из Суммы сделки",
+        "Цена одной акции – текущая",
+        "Сумма сделки – {amount} рублей",
+        "Срок действия поручения по {expiry}",
+        "Прошу считать поручение исполненным при покупке ценных бумаг на объем не менее чем на 90% от указанной в поручении Суммы сделки.",
+        `С информацией о конфликте интересов ознакомлен (${CONFLICT_URL})`,
+      ],
+      dollarText: [
+        "Прошу купить акции NASDAQ: ANT (ISIN US03703U1079)",
+        "Место заключения сделки – внебиржевой рынок",
+        "Количество акций – максимально доступное (без дробных частей), исходя из Суммы сделки",
+        "Цена одной акции – текущая",
+        "Сумма сделки – {amount} долларов",
+        "Срок действия поручения по {expiry}",
+        "Прошу считать поручение исполненным при покупке ценных бумаг на объем не менее чем на 90% от указанной в поручении Суммы сделки.",
+        `С информацией о конфликте интересов ознакомлен (${CONFLICT_URL})`,
+      ],
+    },
     skild: {
       name: "Skild AI",
       price: 966,
@@ -53,6 +101,7 @@
     },
     titans: {
       name: "Titans",
+      usesTotalAmount: true,
       rubleText: [
         "Прошу купить акции класса D (Shares of Class D) инвестиционного фонда AGS Inception Fund Open-Ended Investment Company Limited (ISIN KZQ000001114) под управлением Abylai Global Solutions Ltd.",
         "Место заключения сделки – внебиржевой рынок",
@@ -196,19 +245,17 @@
         .replaceAll("{amount}", formatDraftAmount(netAmount))
         .replaceAll("{expiry}", expiryString));
       amountHint.textContent = `Распознано: ${formatNumber(inputAmount)} → ${formatNumber(netAmount)} руб. после комиссии ${String(rate).replace(".", ",")}%`;
+    } else if (product.usesTotalAmount) {
+      lines = product.dollarText.map((line) => line
+        .replaceAll("{amount}", formatDraftAmount(inputAmount))
+        .replaceAll("{expiry}", expiryString));
+      amountHint.textContent = `Распознано: ${formatNumber(inputAmount)} USD`;
     } else {
       const quantity = Math.floor(inputAmount / product.price);
-      if (selectedProduct === "titans") {
-        lines = product.dollarText.map((line) => line
-          .replaceAll("{amount}", String(inputAmount))
-          .replaceAll("{expiry}", expiryString));
-        amountHint.textContent = `Распознано: ${formatNumber(inputAmount)} USD`;
-      } else {
-        lines = product.dollarText.map((line) => line
-          .replaceAll("{quantity}", String(quantity))
-          .replaceAll("{expiry}", expiryString));
-        amountHint.textContent = `Распознано: ${formatNumber(inputAmount)} → ${quantity} бумаг по ${product.price} USD`;
-      }
+      lines = product.dollarText.map((line) => line
+        .replaceAll("{quantity}", String(quantity))
+        .replaceAll("{expiry}", expiryString));
+      amountHint.textContent = `Распознано: ${formatNumber(inputAmount)} → ${quantity} бумаг по ${product.price} USD`;
     }
     draftText.textContent = lines.join("\n");
     copyButton.disabled = false;
